@@ -14,6 +14,7 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
   const token = middleware.getTokenFromReq(request)
+  console.log(request)
   const decodedToken = jwt.verify(token, process.env.SECRET)
   if (!token || !decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
@@ -46,13 +47,12 @@ blogsRouter.get('/:id', async (request, response) => {
 
 blogsRouter.put('/:id', (request, response, next) => {
   const body = request.body
-  console.log(body)
   const blog = {
     title: body.title,
     author: body.author,
     url: body.url,
     likes: body.likes,
-    user: body.user.id
+    user: body.user
   }
 
   Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
