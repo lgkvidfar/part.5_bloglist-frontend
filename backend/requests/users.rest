@@ -1,0 +1,21 @@
+POST http://localhost:3003/users
+Content-Type: application/json
+
+{
+    "blogs": [],
+    "username": "firstUsername",
+    "name": "firstName",
+    "password": "firstPassword",
+    "user":"firstUser"
+}
+
+###
+
+GET http://localhost:3003/users
+
+###
+POST http://localhost:3003/testing/reset
+
+###
+
+DELETE http://localhost:3003/users/61a229d4c1985fd1270ba448
