@@ -20,4 +20,4 @@ const App = () => {
     </div>
   )
 }
-export default 
+export default App
