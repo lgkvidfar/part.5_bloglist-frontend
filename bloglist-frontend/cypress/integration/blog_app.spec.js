@@ -36,7 +36,7 @@ describe('Blog app', function() {
   })
 
   it('blog form can be opened and blog can be created', function(){
-    cy.get('.btnAddBlog').click()
+    cy.get('.btnTogglableShow').click()
     cy.get('#inputTitle').type('hello, this is my first blog')
     cy.get('#inputAuthor').type('lukas')
     cy.get('#inputUrl').type('url.com')
@@ -75,4 +75,66 @@ describe('Blog app', function() {
     cy.contains('delete').click()
     cy.contains('error')
   })
+
+  it('another user can be added',  function() {
+    const user = {
+      name: 'firstName',
+      username: 'firstUsername',
+      password: 'firstPassword'
+    }
+    cy.request('POST', 'http://localhost:3003/users/', user)
+  })
+
+  it('another created user can log in', function() {
+    cy.contains('log in').click()
+    cy.get('#inputUsername').type('firstUsername')
+    cy.get('#inputPassword').type('firstPassword')
+    cy.get('#btnLogin').click()
+    cy.contains('welcome firstUsername')
+    cy.contains('blogs')
+    cy.get('create').should('not.exist')
+  })
+
+  it('blog form can be opened and blog can be created', function(){
+    cy.contains('add a new blog').click()
+    cy.get('#inputTitle').type('this is my second blog')
+    cy.get('#inputAuthor').type('firstUsername')
+    cy.get('#inputUrl').type('url.com')
+    cy.get('#btnCreateBlog').click()
+    cy.contains('added to list of blogs')
+  })
+
+  it('blogs can be opened so author and url is visible', function() {
+    cy.contains('show more').click({ force:true })
+    cy.get('.btnTogglableShow').click({ multiple:true,force:true })
+    cy.contains('read more at url.com')
+    cy.contains('written by lukas')
+    cy.contains('written by firstUsername')
+  })
+
+  it('likes button be clicked and it updates the likes', function() {
+    cy.contains('hello, this is my first blog | 0 likes')
+    cy.wait(2000)
+    cy.get('#likeButton').click()
+    cy.wait(2000)
+    cy.get('#likeButton').click()
+    cy.contains('hello, this is my first blog | 1 likes')
+  })
+
+  it('Compare the sequence of blog likes', function () {
+    cy.contains('written by firstUsername').find('button').click()
+    cy.contains('written by firstUsername').find('button').click()
+    cy.contains('written by firstUsername').find('button').click()
+    cy.wait(2000)
+    cy.contains('written by firstUsername').find('button').click()
+    cy.contains('written by firstUsername').find('button').click()
+  })
+
+  it('should be sorted by likes', () => {
+    cy.get('li').should(($li) =>
+      expect($li.first()).to.contain('second')
+    )
+  })
+
+
 })

@@ -43,18 +43,21 @@ const App = () => {
           setMessage={setMessage}
         />
       </Togglable>}
-      {user && <h2>blogs</h2>}
       {!user && <h2>blog app</h2>}
-      {blogs.map(blog =>
-        <Blog user={user} key={blog.id} blog={blog} setBlogs={setBlogs} setMessage={setMessage} />
-      )}
+      {user && <h2>blogs</h2>}
+      <ul className="blogsList">
+        {blogs.map(blog =>
+          <Blog user={user} key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} setMessage={setMessage} />
+        )}
+      </ul>
       {!user && <Togglable id="btnOpenLogin" buttonLabel="log in">
         <LoginForm
           username={username} setUsername={setUsername}
           password={password} setPassword={setPassword}
           user={user} setUser={setUser}
           message={message} setMessage={setMessage}
-        /> </Togglable>}
+        /> </Togglable>
+      }
       <Footer />
     </div>
   )
