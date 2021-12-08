@@ -1,58 +1,35 @@
-import React, { useState } from 'react'
-import blogService from '../services/blogs'
+import React from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
 
-const BlogForm = ({ blogs, setBlogs, setMessage }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+const BlogForm = () => {
+  const dispatch = useDispatch()
 
-  const addBlog = async (event, title, author, url) => {
+  const addBlog = async (event) => {
     event.preventDefault()
-    try{
-      const blogObject = {
-        'title': title,
-        'author': author,
-        'url': url
-      }
-
-      await blogService.create(blogObject).then(returnedBlog =>
-        setBlogs(blogs.concat(returnedBlog))
-      )
-
-      setMessage(`${title} by ${author} added to list of blogs`)
-      setTimeout(() => setMessage(null), 3000)
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-    }catch(exception) {
-      setMessage('error',exception)
-      setTimeout(() => setMessage(null), 3000)
+    const blogObject = {
+      'title': event.target.blogTitleInput.value,
+      'author': event.target.blogAuthorInput.value,
+      'url': event.target.blogUrlInput.value,
+      'likes': 0
     }
+    dispatch(createBlog(blogObject))
   }
 
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value)
-  }
-
-  const handleAuthorChange = (event) => {
-    setAuthor(event.target.value)
-  }
-
-  const handleUrlChange = (event) => {
-    setUrl(event.target.value)
-  }
-
-
-  return (
+  const TheForm = () => (
     <div>
       <h2>add a new blog</h2>
-      <form onSubmit={event => addBlog(event, title, author, url)}>
-        <input placeholder="title" id='inputTitle' value={title} onChange={handleTitleChange} required={true}/> <br/>
-        <input placeholder="author"id='inputAuthor' value={author} onChange={handleAuthorChange} required={true}/> <br/>
-        <input placeholder="url" id='inputUrl' value={url} onChange={handleUrlChange} required={true}/> <br/>
+      <form onSubmit={addBlog}>
+        <input placeholder="title" name="blogTitleInput" id='inputTitle'  required={true}/> <br/>
+        <input placeholder="author" name="blogAuthorInput" id='inputAuthor' required={true}/> <br/>
+        <input placeholder="url" name="blogUrlInput" id='inputUrl' required={true}/> <br/>
         <button type="submit" id='btnCreateBlog'>create</button>
       </form>
     </div>
+  )
+
+  return (
+    <TheForm />
   )
 }
 

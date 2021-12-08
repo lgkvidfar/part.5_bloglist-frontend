@@ -1,46 +1,46 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import Togglable from './Togglable'
 import blogService from '../services/blogs'
+import { toggleLikesOf } from '../reducers/blogReducer'
+import { timedMessage } from '../reducers/notificationReducer'
 
 
-const Blog = ({ blog, setBlogs, setMessage,user }) => {
+const Blog = ({ blog }) => {
+  const dispatch = useDispatch()
 
   const handleRemove = async (blog) => {
     try {
-      window.confirm(`delete ${blog.title}?`)
-      await blogService.remove(blog.id)
-      let blogs = await blogService.getAll()
-      blogs.sort((a, b) => b.likes - a.likes)
-      setBlogs(blogs)
+      if(window.confirm(`delete ${blog.title}?`)) {
+        await blogService.remove(blog.id)
+        let blogs = await blogService.getAll()
+        blogs.sort((a, b) => b.likes - a.likes)
+        //setBlogs(blogs)
 
-      setMessage(`${blog.title} by ${blog.author} has been removed`)
-      setTimeout(() => setMessage(null), 3000)
+        dispatch(timedMessage(`${blog.title} by ${blog.author} has been removed`), 3)
+      }
     }catch(err) {
-      setMessage('error', err.messsage)
-      setTimeout(() => setMessage(null), 3000)
+      dispatch(timedMessage('error', err.messsage))
     }
   }
 
-  const verifyRemove = (blog) => {
-    if(user.username === blog.user.username){
-      handleRemove(blog)
-    } else {
-      setMessage('error, not authorized to remove blog')
-      setTimeout(() => setMessage(null), 3000)
-    }
-  }
+  // const verifyRemove = (blog) => {
+  //   if(user.username === blog.user.username){
+  //     handleRemove(blog)
+  //   } else {
+  //     setMessage('error, not authorized to remove blog')
+  //     setTimeout(() => setMessage(null), 3000)
+  //   }
+  // }
 
   const handleLikeChange = async (blog) => {
     await blogService.update(blog.id, {
       'title': blog.title,
       'author': blog.author,
       'url': blog.url,
-      'likes': blog.likes + 1,
+      'likes': blog.likes+1,
     })
-
-    const blogs = await blogService.getAll()
-    blogs.sort((a, b) => b.likes - a.likes)
-    setBlogs(blogs)
+    dispatch(toggleLikesOf(blog))
   }
 
   return (
@@ -51,7 +51,7 @@ const Blog = ({ blog, setBlogs, setMessage,user }) => {
         <p>content long text content long text <br/>
          content long text content long text </p>
         <p>read more at <a href="google.com">url.com</a></p> <br/>
-        <button type="button" onClick={() => verifyRemove(blog)}>delete</button>
+        <button type="button" onClick={() => handleRemove(blog)}>delete</button>
       </Togglable>
       <br/>
     </div>

@@ -1,10 +1,14 @@
-import React from 'react'
+import React,{ useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { timedMessage } from '../reducers/notificationReducer'
+import { setCreds } from '../reducers/userReducer'
 
-import loginService from '../services/login'
-import blogService from '../services/blogs'
 
+const LoginForm = () => {
+  const dispatch = useDispatch()
 
-const LoginForm = ({ setUsername, username, setPassword, password, setUser, setMessage }) => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value)
@@ -16,23 +20,17 @@ const LoginForm = ({ setUsername, username, setPassword, password, setUser, setM
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const loggedUser = await loginService.login({
-        username, password,
-      })
-      blogService.setToken(loggedUser.token)
-      setUser(loggedUser)
-      setMessage(`welcome ${username}`)
-      setTimeout(() => {setMessage(null)}, 3000)
-      setUsername('')
-      setPassword('')
+      dispatch(setCreds({ username, password }))
+      dispatch(timedMessage(`welcome ${username}`))
     } catch (exception) {
       console.log('did not manage login!',exception.message)
-      setMessage('error: incorrect credentials')
+      dispatch(timedMessage('error: incorrect credentials'))
     }
   }
 
   return (
     <div>
+      <h2>blog app</h2>
       <form onSubmit={handleLogin}>
         <input placeholder="username"
           type="username"

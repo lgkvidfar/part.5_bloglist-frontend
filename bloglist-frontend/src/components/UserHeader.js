@@ -1,14 +1,16 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import blogService from '../services/blogs'
 
-const UserHeader = ({ user, setMessage }) => {
+const UserHeader = () => {
 
   const handleLogout = () => {
-    setMessage(`logging out ${user.username}`)
     setTimeout(() => window.localStorage.clear(), 2000)
     setTimeout(() => window.location.reload(), 2000)
     blogService.setToken(null)
   }
+
+  const user = useSelector(state => state.user[0])
   return (
     <div>
       <h3>
