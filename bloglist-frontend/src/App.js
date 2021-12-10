@@ -1,72 +1,91 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Link
 } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
+import { Navbar, Nav } from 'react-bootstrap'
 
 import BlogList from './components/BlogList'
+import BlogInfo from './components/BlogInfo'
+import UserList from './components/UserList'
+import UsersBlogs from './components/UsersBlogs'
 import BlogForm from './forms/BlogForm'
-import blogService from './services/blogs'
 import LoginForm from './forms/LoginForm'
 import Notification from './components/Notification'
 import UserHeader from './components/UserHeader'
 import Footer from './components/Footer'
 import { initializeBlogs } from './reducers/blogReducer'
-import { setLoggedUser } from './reducers/userReducer'
+import { initializeUsers } from './reducers/userReducer'
+import { setLoggedUser } from './reducers/currentReducer'
 
 const App = () => {
-
   const dispatch = useDispatch()
+
   useEffect(() => {
     dispatch(initializeBlogs())
-  })
-
-  const [message, setMessage] = useState(null)
-
+  }, [])
+  useEffect(() => {
+    dispatch(initializeUsers())
+  }, [])
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogger')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       dispatch(setLoggedUser(user))
-      blogService.setToken(user.token)
     }
   }, [])
 
-  const user = useSelector(state => state.user[0])
+  const userToken = useSelector(state => state.current.token)
 
   return (
-    <Router>
-      {user && <UserHeader setMessage={setMessage}/>}
-      <div>
-        <nav>
-          <ul>
-            <li>
+    <div className="container">
+      <UserHeader />
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="#" as="span">
+              <Link to="/">home</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              <Link to="/users">users</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
               <Link to="/blogs">blogs</Link>
-            </li>
-            {!user && <li>
+            </Nav.Link>
+            {!userToken && <Nav.Link href="#" as="span">
               <Link to="/login">login</Link>
-            </li>}
-            <li>
+            </Nav.Link>}
+
+            <Nav.Link href="#" as="span">
               <Link to="/addblog">add blog</Link>
-            </li>
-          </ul>
-        </nav>
-        <Notification setMessage={setMessage} message={message} />
-        <Routes>
-          <Route path="/login" element={<LoginForm
-            message={message} setMessage={setMessage}
-          /> } />
-          <Route path="/blogs" element={<BlogList />} />
-          <Route path="/addblog" element={<BlogForm  />} />
-        </Routes>
-        <Footer />
-      </div>
-    </Router>
+            </Nav.Link>
+
+            <Nav.Link href="#" as="span">
+              {userToken
+                ? <em></em>
+                : <Link to="/login">login</Link>
+              }
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+      <Notification  />
+      <Routes>
+        <Route path="/login" element={<LoginForm
+        /> } />
+        <Route path="/users/*" element={<UserList />} />
+        <Route path="/users/:username" element={<UsersBlogs />} />
+        <Route path="/blogs/*" element={<BlogList />} />
+        <Route path="/blogs/:id/*" element={<BlogInfo />}/>
+        <Route path="/addblog" element={<BlogForm  />} />
+      </Routes>
+      <Footer />
+    </div>
   )
 }
 export default App

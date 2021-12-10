@@ -1,7 +1,7 @@
 import React,{ useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { timedMessage } from '../reducers/notificationReducer'
-import { setCreds } from '../reducers/userReducer'
+import { setCreds } from '../reducers/currentReducer'
 
 
 const LoginForm = () => {
@@ -23,7 +23,6 @@ const LoginForm = () => {
       dispatch(setCreds({ username, password }))
       dispatch(timedMessage(`welcome ${username}`))
     } catch (exception) {
-      console.log('did not manage login!',exception.message)
       dispatch(timedMessage('error: incorrect credentials'))
     }
   }

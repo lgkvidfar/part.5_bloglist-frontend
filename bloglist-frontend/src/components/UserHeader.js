@@ -10,11 +10,12 @@ const UserHeader = () => {
     blogService.setToken(null)
   }
 
-  const user = useSelector(state => state.user[0])
+  const user = useSelector(state => state.current)
+
   return (
     <div>
       <h3>
-        logged in as {user.username} | <button id="btnLogout" type="button" onClick={handleLogout}>logout</button>
+        logged in as {user.username || 'guest'} | {user.username && <button id="btnLogout" type="button" onClick={handleLogout}>logout</button>}
       </h3>
     </div>
   )

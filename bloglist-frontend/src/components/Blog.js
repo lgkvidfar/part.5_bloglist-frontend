@@ -1,23 +1,24 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import Togglable from './Togglable'
 import blogService from '../services/blogs'
-import { toggleLikesOf } from '../reducers/blogReducer'
+import { initializeBlogs, toggleLikesOf } from '../reducers/blogReducer'
 import { timedMessage } from '../reducers/notificationReducer'
+import { setFocusedBlog } from '../reducers/focusedBlogReducer'
+
 
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch()
-
-  const handleRemove = async (blog) => {
+  const handleRemove = async () => {
     try {
       if(window.confirm(`delete ${blog.title}?`)) {
         await blogService.remove(blog.id)
-        let blogs = await blogService.getAll()
+        const blogs = await blogService.getAll()
         blogs.sort((a, b) => b.likes - a.likes)
-        //setBlogs(blogs)
 
         dispatch(timedMessage(`${blog.title} by ${blog.author} has been removed`), 3)
+        dispatch(initializeBlogs())
       }
     }catch(err) {
       dispatch(timedMessage('error', err.messsage))
@@ -33,26 +34,20 @@ const Blog = ({ blog }) => {
   //   }
   // }
 
-  const handleLikeChange = async (blog) => {
-    await blogService.update(blog.id, {
-      'title': blog.title,
-      'author': blog.author,
-      'url': blog.url,
-      'likes': blog.likes+1,
-    })
+  const handleLikeChange = () => {
     dispatch(toggleLikesOf(blog))
+  }
+
+  const handleClick = (blog) => {
+    dispatch(setFocusedBlog(blog))
   }
 
   return (
     <div id="blogTitle" className="blog">
-      <li >{blog.title} | {blog.likes || 0} likes</li>
-      <Togglable className="showMore" id="ShowMore" buttonLabel="show more">
-        <div>written by {blog.author} | <button id="likeButton" type="button" onClick={() => handleLikeChange(blog)}>like</button></div>
-        <p>content long text content long text <br/>
-         content long text content long text </p>
-        <p>read more at <a href="google.com">url.com</a></p> <br/>
-        <button type="button" onClick={() => handleRemove(blog)}>delete</button>
-      </Togglable>
+      <li><Link to={`/blogs/${blog.id}`} onClick={() => handleClick(blog)}>{blog.title}</Link> | {blog.likes || 0} likes</li>
+      <div>written by {blog.author} | <button id="likeButton" type="button" onClick={() => handleLikeChange(blog)}>like</button></div>
+      <p>summary summary summary</p>
+      <button type="button" onClick={() => handleRemove(blog)}>delete</button><br/>
       <br/>
     </div>
   )
