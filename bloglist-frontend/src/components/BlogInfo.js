@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Routes,Route, useParams, useMatch } from 'react-router-dom'
 import CommentForm from '../forms/CommentForm'
 import Comment from './Comment'
-import { initializeBlogs } from '../reducers/blogReducer'
+import { initializeBlogs, toggleLikesOf } from '../reducers/blogReducer'
 
 const BlogInfo = () => {
   const dispatch = useDispatch()
@@ -25,11 +25,15 @@ const BlogInfo = () => {
   //   ? users.find(user => user.username === userMatch.params.username)
   //   : null
 
+  const handleLikeChange = () => {
+    dispatch(toggleLikesOf(blog))
+  }
+
 
   return (
     <div id="blogTitle" className="blog">
       <h3 >{blog.title}</h3>
-      <div>written by {blog.author}</div>
+      <div>written by {blog.author} | {blog.likes || 0} likes<button className="btn btn-block btn-primary" onClick={() => handleLikeChange(blog)}><i className="fa fa-thumbs-up">like</i> </button></div>
       <p>more detailed content add timestamp fun stuff and fact ahhaha </p>
       <p>read more at <a href="google.com">url.com</a></p> <br/>
       <br/>

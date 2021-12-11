@@ -21,6 +21,7 @@ import Footer from './components/Footer'
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUsers } from './reducers/userReducer'
 import { setLoggedUser } from './reducers/currentReducer'
+import HomePage from './components/HomePage'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -64,22 +65,16 @@ const App = () => {
             <Nav.Link href="#" as="span">
               <Link to="/addblog">add blog</Link>
             </Nav.Link>
-
-            <Nav.Link href="#" as="span">
-              {userToken
-                ? <em></em>
-                : <Link to="/login">login</Link>
-              }
-            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
       <Notification  />
       <Routes>
+        <Route path="/" element={<HomePage />}/>
         <Route path="/login" element={<LoginForm
         /> } />
         <Route path="/users/*" element={<UserList />} />
-        <Route path="/users/:username" element={<UsersBlogs />} />
+        <Route path="/users/:id" element={<UsersBlogs />} />
         <Route path="/blogs/*" element={<BlogList />} />
         <Route path="/blogs/:id/*" element={<BlogInfo />}/>
         <Route path="/addblog" element={<BlogForm  />} />

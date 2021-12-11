@@ -2,10 +2,13 @@ import React,{ useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { timedMessage } from '../reducers/notificationReducer'
 import { setCreds } from '../reducers/currentReducer'
+import { useNavigate } from 'react-router'
+import { Form, Button } from 'react-bootstrap'
 
 
 const LoginForm = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -22,6 +25,8 @@ const LoginForm = () => {
     try {
       dispatch(setCreds({ username, password }))
       dispatch(timedMessage(`welcome ${username}`))
+      navigate('/blogs')
+
     } catch (exception) {
       dispatch(timedMessage('error: incorrect credentials'))
     }
@@ -29,27 +34,29 @@ const LoginForm = () => {
 
   return (
     <div>
-      <h2>blog app</h2>
-      <form onSubmit={handleLogin}>
-        <input placeholder="username"
-          type="username"
-          id="inputUsername"
-          value={username}
-          name="Username"
-          onChange={handleUsernameChange}
-          required={true}
-        /> <br/>
-        <input
-          placeholder="password"
-          type="password"
-          id="inputPassword"
-          value={password}
-          name="Password"
-          onChange={handlePasswordChange}
-          required={true}
-        /><br/>
-        <button id="btnLogin" type="submit" >login</button>
-      </form>
+      <h2>log in to blog app</h2>
+      <Form onSubmit={handleLogin}>
+        <Form.Group>
+          <Form.Control placeholder="username"
+            type="username"
+            id="inputUsername"
+            value={username}
+            name="Username"
+            onChange={handleUsernameChange}
+            required={true}
+          /> <br/>
+          <Form.Control
+            placeholder="password"
+            type="password"
+            id="inputPassword"
+            value={password}
+            name="Password"
+            onChange={handlePasswordChange}
+            required={true}
+          /><br/>
+          <Button variant="primary" id="btnLogin" type="submit" >login</Button>
+        </Form.Group>
+      </Form>
     </div>
 
   )

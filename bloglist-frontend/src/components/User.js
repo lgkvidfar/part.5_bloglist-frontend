@@ -13,7 +13,7 @@ const User = ({ user }) => {
 
   return (
     <div id="user" className="user">
-      <li > username: {user.username} | <Link to={`${user.username}`} onClick={() => handleClick(user)}> blogs: {user.blogs.length || 0 }</Link></li>
+      <li > username: {user.username} | <Link to={`/users/${user.id}`} onClick={() => handleClick(user)}> blogs: {user.blogs.length || 0 }</Link></li>
       <Togglable className="btnShowMore" id="ShowMore" buttonLabel="show more">
         <p>info about user info about user <br/>
          info about user info about user </p>

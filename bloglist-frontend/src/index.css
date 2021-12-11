@@ -28,3 +28,12 @@ h2 {
     padding: 10px;
     margin-bottom: 10px;
   }
+
+#btnLogout {
+  background: rgb(102, 98, 122);
+  border-radius: 20px;
+  background: red;
+  width: 5%;
+  width: fit-content;
+
+}

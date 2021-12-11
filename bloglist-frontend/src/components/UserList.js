@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import User from './User'
+import { Table } from 'react-bootstrap'
 
 const UserList = () => {
 
@@ -11,14 +12,17 @@ const UserList = () => {
   return (
     <div>
       {current && <h2>users</h2>}
-      <ul>
-        {sortedUsers.map(u =>
-          <User
-            key={u.id}
-            user={u}
-          />
-        )}
-      </ul>
+      <Table striped>
+        <tbody>
+          {sortedUsers.map(u =>
+            <tr key={u.id}>
+              <td>
+                <User user={u}/>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </div>
   )
 }

@@ -1,0 +1,17 @@
+.card, .btn, .form-control { border-radius: 100; }
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(186, 235, 8, 0.5);
+  }
+  .btn {
+      color: rgb(255, 255, 255)
+  }
+
+  .btn-block {
+      background: rgba(26, 78, 138, 0.877);
+      width: 10;
+  }
+
+  .btn-primary {
+      background: rgb(39, 61, 77);
+      width: 10;
+  }

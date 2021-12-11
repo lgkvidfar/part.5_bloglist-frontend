@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import blogService from '../services/blogs'
-import { initializeBlogs, toggleLikesOf } from '../reducers/blogReducer'
+import { initializeBlogs } from '../reducers/blogReducer'
 import { timedMessage } from '../reducers/notificationReducer'
 import { setFocusedBlog } from '../reducers/focusedBlogReducer'
 
@@ -25,18 +25,6 @@ const Blog = ({ blog }) => {
     }
   }
 
-  // const verifyRemove = (blog) => {
-  //   if(user.username === blog.user.username){
-  //     handleRemove(blog)
-  //   } else {
-  //     setMessage('error, not authorized to remove blog')
-  //     setTimeout(() => setMessage(null), 3000)
-  //   }
-  // }
-
-  const handleLikeChange = () => {
-    dispatch(toggleLikesOf(blog))
-  }
 
   const handleClick = (blog) => {
     dispatch(setFocusedBlog(blog))
@@ -45,7 +33,7 @@ const Blog = ({ blog }) => {
   return (
     <div id="blogTitle" className="blog">
       <li><Link to={`/blogs/${blog.id}`} onClick={() => handleClick(blog)}>{blog.title}</Link> | {blog.likes || 0} likes</li>
-      <div>written by {blog.author} | <button id="likeButton" type="button" onClick={() => handleLikeChange(blog)}>like</button></div>
+      <div>written by {blog.author} </div>
       <p>summary summary summary</p>
       <button type="button" onClick={() => handleRemove(blog)}>delete</button><br/>
       <br/>

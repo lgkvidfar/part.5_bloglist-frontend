@@ -8,7 +8,7 @@ missing: A: page with list and info of users, B: verification for post handling,
 
 update 3:
 recent: app is reduxed and bootstrapped
-missing: app doesn't keep state after refresh.... also navigation post-action is not implemented (log in, add blog, add comment), also verification for post-handling
+missing: app doesn't keep state after refresh.... also navigation post-action is not implemented (log in, add blog, add comment), also verification for post-handling and error handling  in redux is shite
 
 
 
