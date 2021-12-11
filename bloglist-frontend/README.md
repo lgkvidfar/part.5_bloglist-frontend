@@ -10,23 +10,9 @@ update 3:
 recent: app is reduxed and bootstrapped
 missing: app doesn't keep state after refresh.... also navigation post-action is not implemented (log in, add blog, add comment), also verification for post-handling and error handling  in redux is shite
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+update 4: 
+recent: bootstrapped some more and some simple css for practice
+missing: redux state lost efter refresh, verificationf or post handling and error handling inredxu. but I will leave this for now.
 
 
 
